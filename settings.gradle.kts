@@ -46,3 +46,5 @@ fun String.register() {
 include(":app")
 "feature".register()
 "core".register()
+include("core:navigator")
+findProject(":core:navigator")?.name = "navigator"
