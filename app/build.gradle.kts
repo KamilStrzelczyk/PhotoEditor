@@ -24,7 +24,9 @@ tasks.named("spotlessApply") {
     mustRunAfter("checkstyleMain")
 }
 dependencies {
+    implementation("com.formdev:flatlaf:3.5.4")
     implementation(project(":feature:init"))
+    implementation(project(":core:presentation"))
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
