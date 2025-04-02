@@ -16,10 +16,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class DashboardScreen extends JPanel {
-    private static final String SPLASH_IMAGE = "plus_ic.png";
 
-//    @Inject
-    PhotoSourceRepository userRepository;
+    private static final String PLUS_IC = "plus_ic.png";
+    private final PhotoSourceRepository userRepository;
 
     @Inject
     public DashboardScreen(PhotoSourceRepository userRepository) {
@@ -28,11 +27,7 @@ public class DashboardScreen extends JPanel {
         JScrollPane scrollPane = createImageGridScrollPane(e -> uploadImage());
         add(scrollPane, BorderLayout.NORTH);
     }
-//    public DashboardScreen( ) {
-//        setLayout(new BorderLayout());
-//        JScrollPane scrollPane = createImageGridScrollPane(e -> uploadImage());
-//        add(scrollPane, BorderLayout.NORTH);
-//    }
+
 
     private JScrollPane createImageGridScrollPane(Consumer<PEImage> onButtonClicked) {
         return new JScrollPane(createButtonGrid(onButtonClicked), ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -58,14 +53,12 @@ public class DashboardScreen extends JPanel {
     }
 
     private List<PEImage> loadIcons() {
-        ImageIcon icon = new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(SPLASH_IMAGE)));
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(PLUS_IC)));
         return List.of(new PEImage(UUID.randomUUID(), icon, icon), new PEImage(UUID.randomUUID(), icon, icon), new PEImage(UUID.randomUUID(), icon, icon));
     }
 
     private List<JButton> createJButtons(List<PEImage> icons, Consumer<PEImage> onButtonClicked) {
-        return icons.stream()
-                .map(icon -> createButtonForIcon(icon, onButtonClicked))
-                .toList();
+        return icons.stream().map(icon -> createButtonForIcon(icon, onButtonClicked)).toList();
     }
 
     private JButton createButtonForIcon(PEImage icon, Consumer<PEImage> onButtonClicked) {
