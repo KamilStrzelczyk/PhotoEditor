@@ -2,6 +2,7 @@ package org.ks.photoeditor.presentation;
 
 import org.ks.photoeditor.utils.Res;
 
+import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.function.Consumer;
 public class SplashScreen {
     private static final String SPLASH_IMAGE = "photo_editor_splash.png";
 
+    @Inject
     public SplashScreen(Consumer<Void> onSplashFinished) {
         ImageIcon icon = new ImageIcon((Objects.requireNonNull(Res.getImageResourcePath(SPLASH_IMAGE))));
         JWindow splash = new JWindow();
@@ -21,9 +23,11 @@ public class SplashScreen {
         splash.setLocationRelativeTo(null);
         splash.setVisible(true);
 
-        new Timer(5000, e -> {
+        Timer timer = new Timer(5000, e -> {
             splash.setVisible(false);
             onSplashFinished.accept(null);
-        }).start();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }

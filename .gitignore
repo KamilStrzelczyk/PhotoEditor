@@ -1,11 +1,11 @@
-.gradle
+# Gradle - Ignore build artifacts but keep Gradle wrapper
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+!gradle/wrapper/gradle-wrapper.properties
 
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA - Ignore IDE configuration files
+.idea/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -14,10 +14,8 @@ build/
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-### Eclipse ###
+# Eclipse - Ignore Eclipse-specific files
 .apt_generated
 .classpath
 .factorypath
@@ -26,18 +24,27 @@ out/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### NetBeans ###
+# NetBeans - Ignore NetBeans-specific files
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+# VS Code - Ignore VS Code settings
 .vscode/
 
-### Mac OS ###
+# macOS - Ignore system files
 .DS_Store
+
+# Logs - Ignore log files
+*.log
+logs/
+log/
+
+# System and temporary files
+Thumbs.db
+ehthumbs.db
+*.swp
+*.swo

@@ -26,9 +26,14 @@ tasks.named("spotlessApply") {
 dependencies {
     implementation("com.formdev:flatlaf:3.5.4")
     implementation(project(":feature:init"))
+    implementation(project(":feature:editor"))
+    implementation(project(":core:domain"))
     implementation(project(":core:presentation"))
+    implementation(project(":core:infrastructure"))
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("com.google.dagger:dagger:2.50")
+    annotationProcessor("com.google.dagger:dagger-compiler:2.50")
 }
 
 tasks.test {

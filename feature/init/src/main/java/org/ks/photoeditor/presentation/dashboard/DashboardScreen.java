@@ -1,24 +1,33 @@
 package org.ks.photoeditor.presentation.dashboard;
 
+import org.ks.photoeditor.EditorScreen;
 import org.ks.photoeditor.PEImage;
+import org.ks.photoeditor.repository.PhotoSourceRepository;
 import org.ks.photoeditor.utils.Res;
 
+import javax.inject.Inject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class DashboardScreen extends JPanel {
-    private static final String SPLASH_IMAGE = "plus_ic.png";
 
-    public DashboardScreen() {
+    private static final String PLUS_IC = "plus_ic.png";
+    private final PhotoSourceRepository userRepository;
+
+    @Inject
+    public DashboardScreen(PhotoSourceRepository userRepository) {
+        this.userRepository = userRepository;
         setLayout(new BorderLayout());
         JScrollPane scrollPane = createImageGridScrollPane(e -> uploadImage());
         add(scrollPane, BorderLayout.NORTH);
     }
+
 
     private JScrollPane createImageGridScrollPane(Consumer<PEImage> onButtonClicked) {
         return new JScrollPane(createButtonGrid(onButtonClicked), ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -44,14 +53,12 @@ public class DashboardScreen extends JPanel {
     }
 
     private List<PEImage> loadIcons() {
-        ImageIcon icon = new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(SPLASH_IMAGE)));
-        return List.of(new PEImage(1, icon, icon), new PEImage(1, icon, icon), new PEImage(1, icon, icon));
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(PLUS_IC)));
+        return List.of(new PEImage(UUID.randomUUID(), icon, icon), new PEImage(UUID.randomUUID(), icon, icon), new PEImage(UUID.randomUUID(), icon, icon));
     }
 
     private List<JButton> createJButtons(List<PEImage> icons, Consumer<PEImage> onButtonClicked) {
-        return icons.stream()
-                .map(icon -> createButtonForIcon(icon, onButtonClicked))
-                .toList();
+        return icons.stream().map(icon -> createButtonForIcon(icon, onButtonClicked)).toList();
     }
 
     private JButton createButtonForIcon(PEImage icon, Consumer<PEImage> onButtonClicked) {
@@ -70,12 +77,14 @@ public class DashboardScreen extends JPanel {
 
     private void uploadImage() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG, GIF)", "jpg", "png", "gif"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
 
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            // Handle file selection
+            if (userRepository.loadedNewPhoto(file)) {
+                new EditorScreen(userRepository);
+            }
         }
     }
 }
