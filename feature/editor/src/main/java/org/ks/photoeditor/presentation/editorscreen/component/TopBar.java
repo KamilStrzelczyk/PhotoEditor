@@ -1,11 +1,13 @@
-package org.ks.photoeditor.presentation.dashboard.component;
+package org.ks.photoeditor.presentation.editorscreen.component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Comparator;
+import java.util.function.Consumer;
 
 public class TopBar extends JPanel {
 
-    public TopBar() {
+    public TopBar(Consumer<Void> onSave, Consumer<Void> onCancel) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -46,13 +48,21 @@ public class TopBar extends JPanel {
         gbc.weightx = 1;
         add(Box.createHorizontalGlue(), gbc);
 
-        JButton button5 = new JButton("Opcje zapisywania");
-        JButton button6 = new JButton("Anuluj");
+
+        JButton button5 = createButton("Opcje zapisywania", onSave);
+        JButton button6 = createButton("Anuluj", onCancel);
 
         gbc.gridx = 7;
         gbc.weightx = 0;
         add(button5, gbc);
         gbc.gridx = 8;
         add(button6, gbc);
+
+
+    }
+    private JButton createButton(String text, Consumer<Void> action) {
+        JButton button = new JButton(text);
+        button.addActionListener(e -> action.accept(null));
+        return button;
     }
 }
