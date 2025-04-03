@@ -20,7 +20,8 @@ public class Main {
                   new PEFrame(
                       new EditorScreen(
                           appComponent.getPhotoSourceRepository(),
-                          appComponent.getSetImageBlurUseCase()));
+                          appComponent.getSetImageBlurUseCase(),
+                          appComponent.getSetGrayscaleEffectUseCase()));
                 }));
   }
 }
