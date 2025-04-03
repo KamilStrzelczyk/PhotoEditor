@@ -17,7 +17,10 @@ public class Main {
         () ->
             new SplashScreen(
                 onSplashFinished -> {
-                  new PEFrame(new EditorScreen(appComponent.getPhotoSourceRepository()));
+                  new PEFrame(
+                      new EditorScreen(
+                          appComponent.getPhotoSourceRepository(),
+                          appComponent.getSetImageBlurUseCase()));
                 }));
   }
 }

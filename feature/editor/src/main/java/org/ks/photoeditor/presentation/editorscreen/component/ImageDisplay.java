@@ -1,5 +1,6 @@
-package org.ks.photoeditor.presentation.dashboard.component;
+package org.ks.photoeditor.presentation.editorscreen.component;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.swing.*;
@@ -19,8 +20,12 @@ public class ImageDisplay extends JPanel {
     }
 
     public void loadPhoto(PhotoSourceRepository userRepository) {
-        photo = userRepository.getCurrentPhoto();
-        updateImageDisplay();
+        Disposable photoSubscription = userRepository.getCurrentPhoto().subscribe(image ->
+                {
+                    photo = image;
+                    updateImageDisplay();
+                }
+        );
     }
 
     private void updateImageDisplay() {

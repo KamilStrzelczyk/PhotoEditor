@@ -1,5 +1,6 @@
 package org.ks.photoeditor.reposiotry;
 
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.imageio.ImageIO;
@@ -12,26 +13,29 @@ import java.util.UUID;
 @Singleton
 public class PhotoSourceRepositoryImpl implements PhotoSourceRepository {
 
-    File basePhoto;
+    private BufferedImage basePhoto;
+    private final BehaviorSubject<BufferedImage> photoSubject = BehaviorSubject.create();
 
     @Override
-    public BufferedImage getCurrentPhoto() {
-        if (basePhoto == null) {
-            return null;
-        }
-
-        try {
-            return ImageIO.read(basePhoto);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public BehaviorSubject<BufferedImage> getCurrentPhoto() {
+        return photoSubject;
     }
 
     @Override
     public boolean loadedNewPhoto(File photo) {
-        basePhoto = photo;
-        return true;
+        try {
+            BufferedImage image = ImageIO.read(photo);
+            if (image != null) {
+                basePhoto = image;
+                photoSubject.onNext(image);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -42,5 +46,10 @@ public class PhotoSourceRepositoryImpl implements PhotoSourceRepository {
     @Override
     public void saveEditedPhoto() {
 
+    }
+
+    @Override
+    public void updatePhoto(BufferedImage editedImage) {
+        photoSubject.onNext(editedImage);
     }
 }
