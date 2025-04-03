@@ -1,11 +1,9 @@
 package org.ks.photoeditor.presentation.dashboard;
 
-import org.ks.photoeditor.EditorScreen;
 import org.ks.photoeditor.PEImage;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 import org.ks.photoeditor.utils.Res;
 
-import javax.inject.Inject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -15,17 +13,21 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class DashboardScreen extends JPanel {
+public class DashboardScreen extends JDialog {
 
     private static final String PLUS_IC = "plus_ic.png";
     private final PhotoSourceRepository userRepository;
 
-    @Inject
-    public DashboardScreen(PhotoSourceRepository userRepository) {
+    public DashboardScreen(PhotoSourceRepository userRepository, Consumer<Void> onImageSelected) {
         this.userRepository = userRepository;
         setLayout(new BorderLayout());
-        JScrollPane scrollPane = createImageGridScrollPane(e -> uploadImage());
+        JScrollPane scrollPane = createImageGridScrollPane(onButtonClicked -> uploadImage(onImageSelected));
         add(scrollPane, BorderLayout.NORTH);
+        setTitle("PhotoEditor");
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setModal(true);
+        setVisible(true);
     }
 
 
@@ -75,7 +77,7 @@ public class DashboardScreen extends JPanel {
         return button;
     }
 
-    private void uploadImage() {
+    private void uploadImage(Consumer<Void> onImageSelected) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
 
@@ -83,7 +85,8 @@ public class DashboardScreen extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             if (userRepository.loadedNewPhoto(file)) {
-                new EditorScreen(userRepository);
+                onImageSelected.accept(null);
+                setVisible(false);
             }
         }
     }
