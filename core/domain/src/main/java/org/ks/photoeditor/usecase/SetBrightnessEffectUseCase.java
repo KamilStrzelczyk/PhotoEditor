@@ -1,9 +1,19 @@
 package org.ks.photoeditor.usecase;
 
+import org.ks.photoeditor.repository.PhotoSourceRepository;
+
+import javax.inject.Inject;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SetBrightnessEffectUseCase {
+        PhotoSourceRepository userRepository;
+        BufferedImage image;
+
+        @Inject
+        public SetBrightnessEffectUseCase(PhotoSourceRepository userRepository) {
+            this.userRepository = userRepository;
+        }
 
     public static BufferedImage applyBrightness(BufferedImage image, int brightness) {
         int width = image.getWidth();

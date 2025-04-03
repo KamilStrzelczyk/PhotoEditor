@@ -1,9 +1,19 @@
 package org.ks.photoeditor.usecase;
 
+import org.ks.photoeditor.repository.PhotoSourceRepository;
+
+import javax.inject.Inject;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SetSepiaEffectUseCase {
+    PhotoSourceRepository userRepository;
+    BufferedImage image;
+
+    @Inject
+    public SetSepiaEffectUseCase(PhotoSourceRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public static BufferedImage applySepia(BufferedImage image) {
         int width = image.getWidth();
