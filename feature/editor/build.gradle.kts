@@ -4,6 +4,7 @@ plugins {
 group = "org.ks.photoeditor.feature.editor"
 
 dependencies {
+    implementation(project(":core:presentation"))
     implementation(project(":core:domain"))
     implementation("com.google.dagger:dagger:2.50")
     annotationProcessor("com.google.dagger:dagger-compiler:2.50")

@@ -1,4 +1,4 @@
-package org.ks.photoeditor.presentation;
+package org.ks.photoeditor;
 
 import org.ks.photoeditor.utils.Res;
 
