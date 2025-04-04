@@ -21,12 +21,9 @@ public class SetSepiaEffectUseCase {
                 .subscribe(
                         photo -> {
                             if (photo != null) {
-                                System.out.println("Otrzymano zdjęcie.");
                                 image = photo;
                                 userRepository.updatePhoto(applySepia(photo));
 
-                            } else {
-                                System.out.println("Otrzymano null.");
                             }
                         },
                         Throwable::printStackTrace,

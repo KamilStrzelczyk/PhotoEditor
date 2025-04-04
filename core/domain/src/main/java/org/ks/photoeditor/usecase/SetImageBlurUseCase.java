@@ -27,12 +27,9 @@ public class SetImageBlurUseCase {
                 .subscribe(
                         photo -> {
                             if (photo != null) {
-                                System.out.println("Otrzymano zdjęcie.");
                                 image = photo;
                                 userRepository.updatePhoto(algorithm.run(blurRadius, photo));
 
-                            } else {
-                                System.out.println("Otrzymano null.");
                             }
                         },
                         Throwable::printStackTrace,

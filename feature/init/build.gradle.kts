@@ -1,7 +1,16 @@
 plugins {
     id("java")
+    id("com.diffplug.spotless") version "6.25.0"
 }
+
 group = "org.ks.photoeditor.feature.init"
+
+spotless {
+    java {
+        googleJavaFormat()
+
+    }
+}
 
 dependencies {
     implementation(project(":core:presentation"))
