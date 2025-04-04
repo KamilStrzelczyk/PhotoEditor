@@ -17,5 +17,7 @@ public interface PhotoSourceRepository {
 
     void saveEditedPhoto();
 
+    void revertPhoto();
+
     void updatePhoto(BufferedImage editedImage);
 }

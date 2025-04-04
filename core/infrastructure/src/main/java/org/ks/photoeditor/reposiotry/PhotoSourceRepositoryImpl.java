@@ -52,4 +52,11 @@ public class PhotoSourceRepositoryImpl implements PhotoSourceRepository {
     public void updatePhoto(BufferedImage editedImage) {
         photoSubject.onNext(editedImage);
     }
+
+    @Override
+    public void revertPhoto() {
+        if (basePhoto != null) {
+            photoSubject.onNext(basePhoto);
+        }
+    }
 }

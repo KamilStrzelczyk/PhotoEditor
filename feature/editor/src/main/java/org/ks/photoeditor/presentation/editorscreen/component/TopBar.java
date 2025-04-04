@@ -22,36 +22,43 @@ public class TopBar extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
+        addToStart(gbc, actionConsumer);
+        addToCenter(gbc, actionConsumer);
+        addToEnd(gbc, actionConsumer);
+    }
+
+    private void addToStart(GridBagConstraints gbc, Consumer<TopBarAction> actionConsumer) {
+        JButton resetButton = createButton("Resetuj", () -> actionConsumer.accept(TopBarAction.RESET_CLICKED));
+
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        add(resetButton, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        add(Box.createHorizontalGlue(), gbc);
+    }
+
+    private void addToCenter(GridBagConstraints gbc, Consumer<TopBarAction> actionConsumer) {
         JButton blurButton = createIconButton(BLUR_IC, () -> actionConsumer.accept(TopBarAction.BLUR_CLICKED));
         JButton correctionButton = createIconButton(CORRECTION_IC, () -> actionConsumer.accept(TopBarAction.CORRECTION_CLICKED));
         JButton filtersButton = createIconButton(FILTERS_IC, () -> actionConsumer.accept(TopBarAction.FILTERS_CLICKED));
         JButton trimButton = createIconButton(TRIM_IC, () -> actionConsumer.accept(TopBarAction.TRIM_CLICKED));
 
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.weightx = 0;
         add(blurButton, gbc);
-        gbc.gridx = 1;
-        add(correctionButton, gbc);
-        gbc.gridx = 2;
-        add(filtersButton, gbc);
         gbc.gridx = 3;
-        add(trimButton, gbc);
-
+        add(correctionButton, gbc);
         gbc.gridx = 4;
-        gbc.weightx = 1;
-        add(Box.createHorizontalGlue(), gbc);
-
-        JButton resetButton = new JButton("Resetuj");
-        resetButton.addActionListener(e -> actionConsumer.accept(TopBarAction.RESET_CLICKED));
-
+        add(filtersButton, gbc);
         gbc.gridx = 5;
-        gbc.weightx = 0;
-        add(resetButton, gbc);
-
+        add(trimButton, gbc);
         gbc.gridx = 6;
         gbc.weightx = 1;
         add(Box.createHorizontalGlue(), gbc);
+    }
 
+    private void addToEnd(GridBagConstraints gbc, Consumer<TopBarAction> actionConsumer) {
         JButton saveButton = createButton("Opcje zapisywania", () -> actionConsumer.accept(TopBarAction.SAVE_CLICKED));
         saveButton.setBackground(new Color(158, 209, 96));
         saveButton.setForeground(Color.BLACK);
@@ -80,4 +87,3 @@ public class TopBar extends JPanel {
         return button;
     }
 }
-
