@@ -3,10 +3,7 @@ package org.ks.photoeditor.di;
 import dagger.Module;
 import dagger.Provides;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
-import org.ks.photoeditor.usecase.SetGrayscaleEffectUseCase;
-import org.ks.photoeditor.usecase.SetImageBlurUseCase;
-import org.ks.photoeditor.usecase.SetImagePositionUseCase;
-import org.ks.photoeditor.usecase.SetTrimOnImageUseCase;
+import org.ks.photoeditor.usecase.*;
 
 import javax.inject.Singleton;
 
@@ -26,6 +23,11 @@ public class DomainModule {
     @Provides
     SetImagePositionUseCase provideSetImagePositionUseCase(PhotoSourceRepository photoSourceRepository) {
         return new SetImagePositionUseCase(photoSourceRepository);
+    }
+
+    @Provides
+    SetContrastEffectUseCase provideSetContrastEffectUseCase(PhotoSourceRepository photoSourceRepository) {
+        return new SetContrastEffectUseCase(photoSourceRepository);
     }
 
     @Singleton

@@ -32,11 +32,8 @@ public class SetImagePositionUseCase {
                 .subscribe(
                         photo -> {
                             if (photo != null) {
-                                System.out.println("Otrzymano zdjęcie.");
                                 image = photo;
                                 userRepository.updatePhoto(rotate(image, angle));
-                            } else {
-                                System.out.println("Otrzymano null.");
                             }
                         },
                         Throwable::printStackTrace,

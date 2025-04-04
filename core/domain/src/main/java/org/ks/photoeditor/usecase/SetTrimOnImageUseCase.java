@@ -25,8 +25,6 @@ public class SetTrimOnImageUseCase {
                             if (photo != null && cropRect != null) {
                                 BufferedImage trimmedImage = trimImage(photo, cropRect);
                                 photoSourceRepository.updatePhoto(trimmedImage);
-                            } else {
-                                System.out.println("Brak zdjęcia lub prostokąta przycinania.");
                             }
                         },
                         Throwable::printStackTrace,

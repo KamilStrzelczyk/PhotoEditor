@@ -22,12 +22,9 @@ public class SetNegativeEffectUseCase {
                 .subscribe(
                         photo -> {
                             if (photo != null) {
-                                System.out.println("Otrzymano zdjęcie.");
                                 image = photo;
                                 userRepository.updatePhoto(applyNegative(photo));
 
-                            } else {
-                                System.out.println("Otrzymano null.");
                             }
                         },
                         Throwable::printStackTrace,
