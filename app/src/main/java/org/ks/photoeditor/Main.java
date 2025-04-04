@@ -7,7 +7,6 @@ import org.ks.photoeditor.di.AppComponent;
 import org.ks.photoeditor.di.DaggerAppComponent;
 import org.ks.photoeditor.di.DomainModule;
 import org.ks.photoeditor.di.InfrastructureModule;
-import org.ks.photoeditor.presentation.editorscreen.EditorScreen;
 
 public class Main {
   public static void main(String[] args) {
@@ -20,9 +19,6 @@ public class Main {
     FlatDarkLaf.setup();
 
     SwingUtilities.invokeLater(
-        () ->
-            new SplashScreen(
-                onSplashFinished ->
-                    new PEFrame(new EditorScreen(appComponent.getEditorScreenViewModel()))));
+        () -> new SplashScreen(onSplashFinished -> new PEFrame(appComponent.getEditorScreen())));
   }
 }

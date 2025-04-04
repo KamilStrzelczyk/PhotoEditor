@@ -6,6 +6,9 @@ import org.ks.photoeditor.repository.PhotoSourceRepository;
 import org.ks.photoeditor.usecase.SetGrayscaleEffectUseCase;
 import org.ks.photoeditor.usecase.SetImageBlurUseCase;
 import org.ks.photoeditor.usecase.SetImagePositionUseCase;
+import org.ks.photoeditor.usecase.SetTrimOnImageUseCase;
+
+import javax.inject.Singleton;
 
 @Module
 public class DomainModule {
@@ -23,5 +26,11 @@ public class DomainModule {
     @Provides
     SetImagePositionUseCase provideSetImagePositionUseCase(PhotoSourceRepository photoSourceRepository) {
         return new SetImagePositionUseCase(photoSourceRepository);
+    }
+
+    @Singleton
+    @Provides
+    SetTrimOnImageUseCase provideSetTrimOnImageUseCase(PhotoSourceRepository photoSourceRepository) {
+        return new SetTrimOnImageUseCase(photoSourceRepository);
     }
 }

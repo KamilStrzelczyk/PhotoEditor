@@ -5,17 +5,31 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 public class BottomBar extends JPanel {
+    JButton trimButton = new JButton("Przytnij");
 
-    public BottomBar(Consumer<Void> onRotate, Consumer<Void> onScale) {
+    public void run(
+            Consumer<Void> onRotateLeft,
+            Consumer<Void> onRotateRight,
+            Consumer<Void> onTrimButtonClicked
+    ) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        JButton rotateButton = new JButton("Obróć");
-        JButton scaleButton = new JButton("Skaluj");
+        JButton rotateLeftButton = new JButton("Obróć w lewo");
+        JButton rotateRightButton = new JButton("Obróć w prawo");
 
-        rotateButton.addActionListener(e -> onRotate.accept(null));
-        scaleButton.addActionListener(e -> onScale.accept(null));
+        rotateLeftButton.addActionListener(e -> onRotateLeft.accept(null));
+        rotateRightButton.addActionListener(e -> onRotateRight.accept(null));
+        trimButton.addActionListener(e -> onTrimButtonClicked.accept(null));
 
-        add(rotateButton);
-        add(scaleButton);
+        add(rotateLeftButton);
+        add(rotateRightButton);
+        add(trimButton);
+        trimButton.setVisible(false);
+    }
+
+
+    public void setTrimButtonVisible(Boolean isTrimButtonVisible) {
+        trimButton.setVisible(isTrimButtonVisible);
+        repaint();
     }
 }

@@ -1,7 +1,7 @@
 package org.ks.photoeditor.repository;
 
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import org.ks.photoeditor.model.FrameInfo;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,4 +20,6 @@ public interface PhotoSourceRepository {
     void revertPhoto();
 
     void updatePhoto(BufferedImage editedImage);
+
+    BehaviorSubject<FrameInfo> getFrameInfo();
 }

@@ -19,11 +19,11 @@ public class SetImagePositionUseCase {
     }
 
     public void rotateLeft() {
-        rotateImage(-90);
+        rotateImage(90);
     }
 
     public void rotateRight() {
-        rotateImage(90);
+        rotateImage(-90);
     }
 
     private void rotateImage(double angle) {
