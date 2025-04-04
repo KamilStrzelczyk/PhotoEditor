@@ -1,22 +1,34 @@
 package org.ks.photoeditor.presentation.editorscreen.component;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import org.ks.photoeditor.presentation.imagecropper.ImageCropper;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
+import javax.inject.Inject;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ImageDisplay extends JPanel {
+    private ImageCropper cropper;
     private BufferedImage photo = null;
     private JLabel imageLabel = new JLabel("Brak obrazu do wyświetlenia.");
     private JScrollPane scrollPane = new JScrollPane(imageLabel);
 
-    public ImageDisplay() {
-        setLayout(new BorderLayout());
+    @Inject
+    public ImageDisplay(ImageCropper cropper) {
+        this.cropper = cropper;
+        setLayout(new OverlayLayout(this));
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         imageLabel.setVerticalAlignment(JLabel.CENTER);
-        add(scrollPane, BorderLayout.CENTER);
+        add(cropper);
+        add(scrollPane);
+        cropper.setVisible(false);
+    }
+
+    public void runCropper(Boolean isVisible) {
+        cropper.setVisible(isVisible);
+        System.out.println("RUN!!! " + isVisible);
+        this.repaint();
     }
 
     public void loadPhoto(PhotoSourceRepository userRepository) {
