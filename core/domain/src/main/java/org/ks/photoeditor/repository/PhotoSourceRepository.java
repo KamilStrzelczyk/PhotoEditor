@@ -21,5 +21,7 @@ public interface PhotoSourceRepository {
 
     void updatePhoto(BufferedImage editedImage);
 
+    void clear();
+
     BehaviorSubject<FrameInfo> getFrameInfo();
 }

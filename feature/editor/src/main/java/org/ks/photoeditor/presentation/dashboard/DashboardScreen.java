@@ -18,8 +18,11 @@ public class DashboardScreen extends JDialog {
     private static final String PLUS_IC = "plus_ic.png";
     private final PhotoSourceRepository userRepository;
 
-    public DashboardScreen(PhotoSourceRepository userRepository, Consumer<Void> onImageSelected) {
+    public DashboardScreen(PhotoSourceRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public void run(Consumer<Void> onImageSelected) {
         setLayout(new BorderLayout());
         JScrollPane scrollPane = createImageGridScrollPane(onButtonClicked -> uploadImage(onImageSelected));
         add(scrollPane, BorderLayout.NORTH);
@@ -30,6 +33,10 @@ public class DashboardScreen extends JDialog {
         setVisible(true);
     }
 
+
+    public void setIsVisible(Boolean isVisible) {
+        setVisible(isVisible);
+    }
 
     private JScrollPane createImageGridScrollPane(Consumer<PEImage> onButtonClicked) {
         return new JScrollPane(createButtonGrid(onButtonClicked), ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
