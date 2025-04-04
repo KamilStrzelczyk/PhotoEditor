@@ -67,8 +67,7 @@ public class EditorScreen extends JPanel {
           lightSidePanel.run();
 
           JPanel sidePanelsContainer = new JPanel();
-          sidePanelsContainer.setLayout(
-              new BoxLayout(sidePanelsContainer, BoxLayout.Y_AXIS));
+          sidePanelsContainer.setLayout(new BoxLayout(sidePanelsContainer, BoxLayout.Y_AXIS));
 
           sidePanelsContainer.add(effectSidePanel);
           sidePanelsContainer.add(lightSidePanel);

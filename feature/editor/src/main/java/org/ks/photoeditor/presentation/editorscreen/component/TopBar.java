@@ -65,7 +65,7 @@ public class TopBar extends JPanel {
 
   private void addToEnd(GridBagConstraints gbc, Consumer<TopBarAction> actionConsumer) {
     JButton saveButton =
-        createButton("Opcje zapisywania", () -> actionConsumer.accept(TopBarAction.SAVE_CLICKED));
+        createButton("Zapisz", () -> actionConsumer.accept(TopBarAction.SAVE_CLICKED));
     saveButton.setBackground(new Color(158, 209, 96));
     saveButton.setForeground(Color.BLACK);
     saveButton.setOpaque(true);
