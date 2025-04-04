@@ -58,7 +58,8 @@ public class EditorScreenViewModel {
                 // Handle save action
                 break;
             case CANCEL_CLICKED:
-                // Handle cancel action
+                photoSourceRepository.clear();
+                state.setCancelled();
                 break;
         }
         state.keepTrimVisible(action);
@@ -69,6 +70,7 @@ public class EditorScreenViewModel {
         System.out.println("onRotateClickedLeft");
         setImagePosition.rotateLeft();
     }
+
     public void onTrimButtonClicked() {
         System.out.println("onTrimButtonClicked");
         setTrimOnImage.run();

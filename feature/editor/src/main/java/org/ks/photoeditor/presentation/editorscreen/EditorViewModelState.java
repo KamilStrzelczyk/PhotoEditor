@@ -27,11 +27,21 @@ public class EditorViewModelState {
     }
 
     public void keepTrimVisible(TopBarAction action) {
+        if (action == TopBarAction.CANCEL_CLICKED) return;
         if (action != TopBarAction.TRIM_CLICKED) {
             resetStates();
         }
     }
+
+    public void setCancelled() {
+        this.isCancelled = true;
+    }
+
     public boolean isImageCropperVisible() {
         return isImageCropperVisible;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
     }
 }

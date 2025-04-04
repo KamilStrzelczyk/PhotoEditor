@@ -4,6 +4,7 @@ import org.ks.photoeditor.presentation.dashboard.DashboardScreen;
 import org.ks.photoeditor.presentation.editorscreen.component.BottomBar;
 import org.ks.photoeditor.presentation.editorscreen.component.ImageDisplay;
 import org.ks.photoeditor.presentation.editorscreen.component.TopBar;
+import org.ks.photoeditor.presentation.editorscreen.effectsidepanel.EffectSidePanel;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.inject.Inject;
@@ -15,21 +16,24 @@ import java.beans.PropertyChangeListener;
 import static org.ks.photoeditor.presentation.editorscreen.EditorScreenViewModel.STATE;
 
 public class EditorScreen extends JPanel {
-    Boolean isTrimButtonVisible = false;
+    EffectSidePanel sidePanel;
     EditorScreenViewModel viewModel;
     PhotoSourceRepository userRepository;
     ImageDisplay imageDisplay;
     BottomBar bottomBar = new BottomBar();
+    DashboardScreen dashboardScreen;
 
     @Inject
     public EditorScreen(
             EditorScreenViewModel viewModel,
+            EffectSidePanel sidePanel,
             ImageDisplay imageDisplay
     ) {
         this.viewModel = viewModel;
         this.imageDisplay = imageDisplay;
         this.userRepository = viewModel.photoSourceRepository;
-
+        this.dashboardScreen = new DashboardScreen(userRepository);
+        this.sidePanel = sidePanel;
         viewModel.addPropertyChangeListener(
                 new PropertyChangeListener() {
                     @Override
@@ -37,6 +41,7 @@ public class EditorScreen extends JPanel {
                         if (STATE.equals(evt.getPropertyName())) {
                             imageDisplay.runCropper(viewModel.state.isImageCropperVisible());
                             bottomBar.setTrimButtonVisible(viewModel.state.isImageCropperVisible());
+                            dashboardScreen.setIsVisible(viewModel.state.isCancelled());
                         }
                     }
                 });
@@ -54,8 +59,9 @@ public class EditorScreen extends JPanel {
             );
             add(topBar, BorderLayout.NORTH);
             add(imageDisplay, BorderLayout.CENTER);
+            add(sidePanel, BorderLayout.EAST);
             add(bottomBar, BorderLayout.SOUTH);
-            new DashboardScreen(userRepository, onImageSelected -> {
+            dashboardScreen.run(onImageSelected -> {
                 imageDisplay.loadPhoto(userRepository);
             });
         });

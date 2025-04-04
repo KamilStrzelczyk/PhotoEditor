@@ -27,7 +27,6 @@ public class ImageDisplay extends JPanel {
 
     public void runCropper(Boolean isVisible) {
         cropper.setVisible(isVisible);
-        System.out.println("RUN!!! " + isVisible);
         this.repaint();
     }
 

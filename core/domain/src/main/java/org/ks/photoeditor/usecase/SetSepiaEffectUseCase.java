@@ -1,5 +1,6 @@
 package org.ks.photoeditor.usecase;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.inject.Inject;
@@ -13,6 +14,26 @@ public class SetSepiaEffectUseCase {
     @Inject
     public SetSepiaEffectUseCase(PhotoSourceRepository userRepository) {
         this.userRepository = userRepository;
+    }
+    public void run() {
+        System.out.println("Sepia image 1");
+        Disposable photoSubscription = userRepository.getCurrentPhoto().firstElement()
+                .subscribe(
+                        photo -> {
+                            if (photo != null) {
+                                System.out.println("Otrzymano zdjęcie.");
+                                image = photo;
+                                userRepository.updatePhoto(applySepia(photo));
+
+                            } else {
+                                System.out.println("Otrzymano null.");
+                            }
+                        },
+                        Throwable::printStackTrace,
+                        () -> {
+                            System.out.println("Strumień zakończony.");
+                        }
+                );
     }
 
     public static BufferedImage applySepia(BufferedImage image) {

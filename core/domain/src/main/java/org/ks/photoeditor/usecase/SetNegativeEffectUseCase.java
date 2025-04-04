@@ -1,5 +1,6 @@
 package org.ks.photoeditor.usecase;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.inject.Inject;
@@ -14,6 +15,28 @@ public class SetNegativeEffectUseCase {
     public SetNegativeEffectUseCase(PhotoSourceRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    public void run() {
+        System.out.println("Negative image 1");
+        Disposable photoSubscription = userRepository.getCurrentPhoto().firstElement()
+                .subscribe(
+                        photo -> {
+                            if (photo != null) {
+                                System.out.println("Otrzymano zdjęcie.");
+                                image = photo;
+                                userRepository.updatePhoto(applyNegative(photo));
+
+                            } else {
+                                System.out.println("Otrzymano null.");
+                            }
+                        },
+                        Throwable::printStackTrace,
+                        () -> {
+                            System.out.println("Strumień zakończony.");
+                        }
+                );
+    }
+
 
     public static BufferedImage applyNegative(BufferedImage image) {
         int width = image.getWidth();

@@ -63,6 +63,13 @@ public class PhotoSourceRepositoryImpl implements PhotoSourceRepository {
     }
 
     @Override
+    public void clear() {
+        basePhoto = null;
+        photoSubject.onNext(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+        frameInfoSubject.onNext(new FrameInfo(0, 0));
+    }
+
+    @Override
     public void revertPhoto() {
         if (basePhoto != null) {
             photoSubject.onNext(basePhoto);
