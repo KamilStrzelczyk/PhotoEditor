@@ -1,8 +1,14 @@
 package org.ks.photoeditor.presentation.editorscreen;
 
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.IOException;
+import java.util.function.Consumer;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.swing.*;
 import org.ks.photoeditor.presentation.editorscreen.component.TopBarAction;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 import org.ks.photoeditor.usecase.SetGrayscaleEffectUseCase;
@@ -53,7 +59,12 @@ public class EditorScreenViewModel {
         photoSourceRepository.revertPhoto();
         break;
       case SAVE_CLICKED:
-        // Handle save action
+        new SaveImage(
+            photoSourceRepository,
+            onFileSaved -> {
+              photoSourceRepository.clear();
+              state.setCancelled();
+            });
         break;
       case CANCEL_CLICKED:
         photoSourceRepository.clear();
@@ -81,5 +92,46 @@ public class EditorScreenViewModel {
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     support.addPropertyChangeListener(listener);
+  }
+}
+
+class SaveImage {
+  JFileChooser fileChooser = new JFileChooser();
+  PhotoSourceRepository photoSourceRepository;
+
+  SaveImage(PhotoSourceRepository photoSourceRepository, Consumer<Void> onFileSaved) {
+    this.photoSourceRepository = photoSourceRepository;
+
+    JComboBox<String> formatComboBox = new JComboBox<>(new String[] {"PNG", "JPG"});
+    JPanel accessoryPanel = new JPanel();
+    accessoryPanel.add(new JLabel("Zapisz jako typ: "));
+    accessoryPanel.add(formatComboBox);
+    fileChooser.setAccessory(accessoryPanel);
+
+    int returnValue = fileChooser.showSaveDialog(null);
+
+    if (returnValue == JFileChooser.APPROVE_OPTION) {
+      File selectedFile = fileChooser.getSelectedFile();
+      String filePath = selectedFile.getAbsolutePath();
+      String selectedFormat = (String) formatComboBox.getSelectedItem();
+
+      if (!filePath.toLowerCase().endsWith(".png") && !filePath.toLowerCase().endsWith(".jpg")) {
+        filePath += "." + selectedFormat.toLowerCase();
+        selectedFile = new File(filePath);
+      }
+
+      BufferedImage image = photoSourceRepository.getCurrentPhoto().blockingFirst();
+
+      if (image != null) {
+        try {
+          ImageIO.write(image, selectedFormat.toLowerCase(), selectedFile);
+          JOptionPane.showMessageDialog(null, "Obraz zapisany pomyślnie jako " + selectedFormat);
+          onFileSaved.accept(null);
+        } catch (IOException e) {
+          JOptionPane.showMessageDialog(null, "Błąd podczas zapisywania obrazu.");
+          e.printStackTrace();
+        }
+      }
+    }
   }
 }
