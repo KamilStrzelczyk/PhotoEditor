@@ -12,6 +12,15 @@ public class PEFrame extends JFrame {
     public PEFrame(JPanel screen) {
         Image icon = new ImageIcon((Objects.requireNonNull(Res.getIcResourcePath(PHOTO_EDITOR_IC)))).getImage();
         setIconImage(icon);
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            try {
+                taskbar.setIconImage(icon);
+            } catch (UnsupportedOperationException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
         setTitle("PhotoEditor");
         setSize(600, 400);
         this.add(screen, BorderLayout.CENTER);

@@ -1,6 +1,9 @@
 package org.ks.photoeditor.presentation.dashboard;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +13,14 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import org.ks.photoeditor.PEImage;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
@@ -46,9 +56,9 @@ public class DashboardScreen extends JDialog {
 
   private JScrollPane createImageGridScrollPane(Consumer<PEImage> onButtonClicked) {
     return new JScrollPane(
-        createButtonGrid(onButtonClicked),
-        ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            createButtonGrid(onButtonClicked),
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
   }
 
   private JPanel createButtonGrid(Consumer<PEImage> onButtonClicked) {
@@ -64,56 +74,46 @@ public class DashboardScreen extends JDialog {
       panel.add(button);
     }
 
-    panel.setPreferredSize(new Dimension(100, 100));
-    panel.setMaximumSize(new Dimension(100, 100));
-    panel.setMinimumSize(new Dimension(100, 100));
+    panel.setPreferredSize(new Dimension(300, 300));
     return panel;
   }
 
   private List<PEImage> loadIcons() {
-    ImageIcon icon = new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(PLUS_IC)));
-    ImageIcon image_1 = new ImageIcon(Objects.requireNonNull(Res.getImageResourcePath(EXAMPLE)));
-    ImageIcon image_2 = new ImageIcon(Objects.requireNonNull(Res.getImageResourcePath(EXAMPLE_2)));
+    ImageIcon plusIcon = new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(PLUS_IC)));
+
+    URL urlExample1 = Res.getImageResourcePath(EXAMPLE);
+    URL urlExample2 = Res.getImageResourcePath(EXAMPLE_2);
+    ImageIcon imageExample1 = new ImageIcon(urlExample1);
+    ImageIcon imageExample2 = new ImageIcon(urlExample2);
+
     return List.of(
-        new PEImage(UUID.randomUUID(), icon, icon),
-        new PEImage(UUID.randomUUID(), null, image_1),
-        new PEImage(UUID.randomUUID(), null, image_2));
+            new PEImage(UUID.randomUUID(), plusIcon, null),
+            new PEImage(UUID.randomUUID(), imageExample1, urlExample1),
+            new PEImage(UUID.randomUUID(), imageExample2, urlExample2)
+    );
   }
 
   private List<JButton> createJButtons(List<PEImage> icons, Consumer<PEImage> onButtonClicked) {
     return icons.stream().map(icon -> createButton(icon, onButtonClicked)).toList();
   }
 
-  private JButton createButton(PEImage icon, Consumer<PEImage> onButtonClicked) {
-    Image imageToScale;
-    if (icon.image() != null) {
-      imageToScale = icon.image().getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-    } else {
-      imageToScale = icon.thumbnail().getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-    }
-
+  private JButton createButton(PEImage peImage, Consumer<PEImage> onButtonClicked) {
+    Image imageToScale = peImage.image().getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
     JButton button = new JButton(new ImageIcon(imageToScale));
-
-    button.addActionListener(
-        e -> {
-          System.out.println(icon.id());
-          onButtonClicked.accept(icon);
-        });
+    button.addActionListener(e -> {
+      System.out.println(peImage.id());
+      onButtonClicked.accept(peImage);
+    });
     button.setPreferredSize(new Dimension(100, 100));
-    button.setMaximumSize(new Dimension(100, 100));
-    button.setMinimumSize(new Dimension(100, 100));
     return button;
   }
 
   private void handleButtonClick(PEImage peImage) {
-    if (peImage.thumbnail().getImage()
-        == new ImageIcon(Objects.requireNonNull(Res.getIcResourcePath(PLUS_IC))).getImage()) {
+    if (peImage.url() == null) {
       uploadImage(onImageSelected);
     } else {
       try {
-        URL imageUrl = Res.getImageResourcePath(EXAMPLE);
-        BufferedImage image = ImageIO.read(imageUrl);
-
+        BufferedImage image = ImageIO.read(peImage.url());
         File tempFile = File.createTempFile("tempImage", ".png");
         ImageIO.write(image, "png", tempFile);
         if (userRepository.loadedNewPhoto(tempFile)) {
@@ -129,9 +129,7 @@ public class DashboardScreen extends JDialog {
 
   private void uploadImage(Consumer<Void> onImageSelected) {
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setFileFilter(
-        new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
-
+    fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
     int result = fileChooser.showOpenDialog(this);
     if (result == JFileChooser.APPROVE_OPTION) {
       File file = fileChooser.getSelectedFile();
