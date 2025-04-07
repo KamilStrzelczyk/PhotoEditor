@@ -1,5 +1,7 @@
 package org.ks.photoeditor.presentation.editorscreen;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -39,10 +41,32 @@ public class EditorScreenViewModel {
     this.setGrayscaleEffect = setGrayscaleEffect;
     this.setImagePosition = setImagePosition;
     this.setTrimOnImage = setTrimOnImage;
+    Disposable undoObserver =
+        photoSourceRepository
+            .canUndo()
+            .observeOn(Schedulers.io())
+            .subscribe(
+                enable -> {
+                  state.setUndoButtonActive(enable);
+                  support.firePropertyChange(STATE, null, state);
+                });
+
+    Disposable saveFileObserver =
+        photoSourceRepository
+            .saveFileIsEnable()
+            .observeOn(Schedulers.io())
+            .subscribe(
+                enable -> {
+                  state.setSaveButtonActive(enable);
+                  support.firePropertyChange(STATE, null, state);
+                });
   }
 
   public void onTopBarActionClicked(TopBarAction action) {
     switch (action) {
+      case UNDO_CLICKED:
+        photoSourceRepository.undo();
+        break;
       case BLUR_CLICKED:
         setImageBlur.applyBlur(5);
         break;
@@ -76,17 +100,14 @@ public class EditorScreenViewModel {
   }
 
   public void onRotateClickedLeft() {
-    System.out.println("onRotateClickedLeft");
     setImagePosition.rotateLeft();
   }
 
   public void onTrimButtonClicked() {
-    System.out.println("onTrimButtonClicked");
     setTrimOnImage.run();
   }
 
   public void onRotateClickedRight() {
-    System.out.println("onRotateClickedRight");
     setImagePosition.rotateRight();
   }
 
