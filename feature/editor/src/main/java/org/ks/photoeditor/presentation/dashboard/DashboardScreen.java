@@ -32,14 +32,12 @@ public class DashboardScreen extends JDialog {
   private static final String EXAMPLE = "example_1.jpg";
   private static final String EXAMPLE_2 = "example_2.png";
   private final PhotoSourceRepository userRepository;
-  private Consumer<Void> onImageSelected;
 
   public DashboardScreen(PhotoSourceRepository userRepository) {
     this.userRepository = userRepository;
   }
 
-  public void run(Consumer<Void> onImageSelected) {
-    this.onImageSelected = onImageSelected;
+  public void run() {
     setLayout(new BorderLayout());
     JScrollPane scrollPane = createImageGridScrollPane(this::handleButtonClick);
     add(scrollPane, BorderLayout.NORTH);
@@ -110,14 +108,13 @@ public class DashboardScreen extends JDialog {
 
   private void handleButtonClick(PEImage peImage) {
     if (peImage.url() == null) {
-      uploadImage(onImageSelected);
+      uploadImage();
     } else {
       try {
         BufferedImage image = ImageIO.read(peImage.url());
         File tempFile = File.createTempFile("tempImage", ".png");
         ImageIO.write(image, "png", tempFile);
         if (userRepository.loadedNewPhoto(tempFile)) {
-          onImageSelected.accept(null);
           setVisible(false);
         }
       } catch (IOException e) {
@@ -127,14 +124,13 @@ public class DashboardScreen extends JDialog {
     }
   }
 
-  private void uploadImage(Consumer<Void> onImageSelected) {
+  private void uploadImage() {
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
     int result = fileChooser.showOpenDialog(this);
     if (result == JFileChooser.APPROVE_OPTION) {
       File file = fileChooser.getSelectedFile();
       if (userRepository.loadedNewPhoto(file)) {
-        onImageSelected.accept(null);
         setVisible(false);
       }
     }

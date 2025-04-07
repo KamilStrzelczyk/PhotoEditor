@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import org.ks.photoeditor.presentation.editorscreen.EditorScreen;
 import org.ks.photoeditor.presentation.editorscreen.EditorScreenViewModel;
-import org.ks.photoeditor.presentation.editorscreen.component.ImageDisplay;
+import org.ks.photoeditor.presentation.editorscreen.ImageDisplay.ImageDisplay;
 import org.ks.photoeditor.presentation.editorscreen.effectsidepanel.EffectSidePanel;
 import org.ks.photoeditor.presentation.editorscreen.effectsidepanel.SidePanelViewModel;
 import org.ks.photoeditor.presentation.editorscreen.lightsidepanel.LightSidePanel;
