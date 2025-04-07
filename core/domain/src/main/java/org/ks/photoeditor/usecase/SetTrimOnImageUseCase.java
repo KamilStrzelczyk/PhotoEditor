@@ -1,6 +1,7 @@
 package org.ks.photoeditor.usecase;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.inject.Inject;
@@ -19,7 +20,10 @@ public class SetTrimOnImageUseCase {
     }
 
     public void run() {
-        Disposable photoSubscription = photoSourceRepository.getCurrentPhoto().firstElement()
+        Disposable photoSubscription = photoSourceRepository
+                .getCurrentPhoto()
+                .observeOn(Schedulers.computation())
+                .firstElement()
                 .subscribe(
                         photo -> {
                             if (photo != null && cropRect != null) {

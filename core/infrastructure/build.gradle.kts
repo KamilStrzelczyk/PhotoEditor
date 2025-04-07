@@ -1,8 +1,16 @@
 plugins {
     id("java")
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "org.ks.photoeditor.core.infrastructure"
+
+spotless {
+    java {
+        googleJavaFormat()
+
+    }
+}
 
 dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.5")

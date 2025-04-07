@@ -10,8 +10,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.inject.Inject;
 import javax.swing.*;
-import org.ks.photoeditor.model.FrameInfo;
 import org.ks.photoeditor.domain.model.ImagePosition;
+import org.ks.photoeditor.model.FrameInfo;
 
 public class ImageCropper extends JPanel {
   FrameInfo frameInfo;
@@ -25,7 +25,7 @@ public class ImageCropper extends JPanel {
   private static final int HANDLE_SIZE = 8;
   private int originalWidth;
   private int originalHeight;
-  private ImageCropperViewModel viewModel;
+  private final ImageCropperViewModel viewModel;
 
   @Inject
   public ImageCropper(ImageCropperViewModel viewModel) {
@@ -34,15 +34,15 @@ public class ImageCropper extends JPanel {
     imagePosition = null;
 
     viewModel.addPropertyChangeListener(
-            new PropertyChangeListener() {
-              @Override
-              public void propertyChange(PropertyChangeEvent evt) {
-                if (FRAME_INFO.equals(evt.getPropertyName())) {
-                  frameInfo = (FrameInfo) evt.getNewValue();
-                  updateCropRect();
-                }
-              }
-            });
+        new PropertyChangeListener() {
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            if (FRAME_INFO.equals(evt.getPropertyName())) {
+              frameInfo = (FrameInfo) evt.getNewValue();
+              updateCropRect();
+            }
+          }
+        });
 
     cropRect = new Rectangle(50, 50, 100, 100);
     startPoint = new Point();
@@ -52,44 +52,44 @@ public class ImageCropper extends JPanel {
     setVisible(true);
 
     addMouseListener(
-            new MouseAdapter() {
-              @Override
-              public void mousePressed(MouseEvent e) {
-                dragHandle = getHandle(e.getPoint());
-                if (dragHandle != -1) {
-                  startPoint = e.getPoint();
-                  dragging = true;
-                } else if (cropRect.contains(e.getPoint())) {
-                  startPoint = e.getPoint();
-                  dragging = true;
-                  dragHandle = 8;
-                }
-              }
+        new MouseAdapter() {
+          @Override
+          public void mousePressed(MouseEvent e) {
+            dragHandle = getHandle(e.getPoint());
+            if (dragHandle != -1) {
+              startPoint = e.getPoint();
+              dragging = true;
+            } else if (cropRect.contains(e.getPoint())) {
+              startPoint = e.getPoint();
+              dragging = true;
+              dragHandle = 8;
+            }
+          }
 
-              @Override
-              public void mouseReleased(MouseEvent e) {
-                dragging = false;
-                dragHandle = -1;
-                sendCropRect();
-              }
-            });
+          @Override
+          public void mouseReleased(MouseEvent e) {
+            dragging = false;
+            dragHandle = -1;
+            sendCropRect();
+          }
+        });
 
     addMouseMotionListener(
-            new MouseMotionAdapter() {
-              @Override
-              public void mouseDragged(MouseEvent e) {
-                if (dragging) {
-                  if (dragHandle == 8) {
-                    moveCropRect(e.getPoint());
-                  } else {
-                    resizeCropRect(e.getPoint());
-                  }
-                  startPoint = e.getPoint();
-                  repaint();
-                  sendCropRect();
-                }
+        new MouseMotionAdapter() {
+          @Override
+          public void mouseDragged(MouseEvent e) {
+            if (dragging) {
+              if (dragHandle == 8) {
+                moveCropRect(e.getPoint());
+              } else {
+                resizeCropRect(e.getPoint());
               }
-            });
+              startPoint = e.getPoint();
+              repaint();
+              sendCropRect();
+            }
+          }
+        });
   }
 
   public void updateImageInfo(ImagePosition imagePosition) {
@@ -119,37 +119,37 @@ public class ImageCropper extends JPanel {
       return 0; // Lewy górny róg
     if (new Rectangle(
             cropRect.x + cropRect.width - HANDLE_SIZE, cropRect.y, HANDLE_SIZE, HANDLE_SIZE)
-            .contains(p)) return 1; // Prawy górny róg
+        .contains(p)) return 1; // Prawy górny róg
     if (new Rectangle(
             cropRect.x + cropRect.width - HANDLE_SIZE,
             cropRect.y + cropRect.height - HANDLE_SIZE,
             HANDLE_SIZE,
             HANDLE_SIZE)
-            .contains(p)) return 2; // Prawy dolny róg
+        .contains(p)) return 2; // Prawy dolny róg
     if (new Rectangle(
             cropRect.x, cropRect.y + cropRect.height - HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE)
-            .contains(p)) return 3; // Lewy dolny róg
+        .contains(p)) return 3; // Lewy dolny róg
     if (new Rectangle(
             cropRect.x + cropRect.width / 2 - HANDLE_SIZE / 2, cropRect.y, HANDLE_SIZE, HANDLE_SIZE)
-            .contains(p)) return 4; // Górna krawędź
+        .contains(p)) return 4; // Górna krawędź
     if (new Rectangle(
             cropRect.x,
             cropRect.y + cropRect.height / 2 - HANDLE_SIZE / 2,
             HANDLE_SIZE,
             HANDLE_SIZE)
-            .contains(p)) return 5; // Lewa krawędź
+        .contains(p)) return 5; // Lewa krawędź
     if (new Rectangle(
             cropRect.x + cropRect.width - HANDLE_SIZE,
             cropRect.y + cropRect.height / 2 - HANDLE_SIZE / 2,
             HANDLE_SIZE,
             HANDLE_SIZE)
-            .contains(p)) return 6; // Prawa krawędź
+        .contains(p)) return 6; // Prawa krawędź
     if (new Rectangle(
             cropRect.x + cropRect.width / 2 - HANDLE_SIZE / 2,
             cropRect.y + cropRect.height - HANDLE_SIZE,
             HANDLE_SIZE,
             HANDLE_SIZE)
-            .contains(p)) return 7; // Dolna krawędź
+        .contains(p)) return 7; // Dolna krawędź
     return -1;
   }
 
@@ -247,40 +247,40 @@ public class ImageCropper extends JPanel {
     g.setColor(Color.BLUE);
     g.fillRect(cropRect.x, cropRect.y, HANDLE_SIZE, HANDLE_SIZE); // Lewy górny róg
     g.fillRect(
-            cropRect.x + cropRect.width - HANDLE_SIZE,
-            cropRect.y,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Prawy górny róg
+        cropRect.x + cropRect.width - HANDLE_SIZE,
+        cropRect.y,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Prawy górny róg
     g.fillRect(
-            cropRect.x + cropRect.width - HANDLE_SIZE,
-            cropRect.y + cropRect.height - HANDLE_SIZE,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Prawy dolny róg
+        cropRect.x + cropRect.width - HANDLE_SIZE,
+        cropRect.y + cropRect.height - HANDLE_SIZE,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Prawy dolny róg
     g.fillRect(
-            cropRect.x,
-            cropRect.y + cropRect.height - HANDLE_SIZE,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Lewy dolny róg
+        cropRect.x,
+        cropRect.y + cropRect.height - HANDLE_SIZE,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Lewy dolny róg
     g.fillRect(
-            cropRect.x + cropRect.width / 2 - HANDLE_SIZE / 2,
-            cropRect.y,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Górna krawędź
+        cropRect.x + cropRect.width / 2 - HANDLE_SIZE / 2,
+        cropRect.y,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Górna krawędź
     g.fillRect(
-            cropRect.x,
-            cropRect.y + cropRect.height / 2 - HANDLE_SIZE / 2,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Lewa krawędź
+        cropRect.x,
+        cropRect.y + cropRect.height / 2 - HANDLE_SIZE / 2,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Lewa krawędź
     g.fillRect(
-            cropRect.x + cropRect.width - HANDLE_SIZE,
-            cropRect.y + cropRect.height / 2 - HANDLE_SIZE / 2,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Prawa krawędź
+        cropRect.x + cropRect.width - HANDLE_SIZE,
+        cropRect.y + cropRect.height / 2 - HANDLE_SIZE / 2,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Prawa krawędź
     g.fillRect(
-            cropRect.x + cropRect.width / 2 - HANDLE_SIZE / 2,
-            cropRect.y + cropRect.height - HANDLE_SIZE,
-            HANDLE_SIZE,
-            HANDLE_SIZE); // Dolna krawędź
+        cropRect.x + cropRect.width / 2 - HANDLE_SIZE / 2,
+        cropRect.y + cropRect.height - HANDLE_SIZE,
+        HANDLE_SIZE,
+        HANDLE_SIZE); // Dolna krawędź
   }
 
   private void sendCropRect() {
