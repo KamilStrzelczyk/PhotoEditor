@@ -5,18 +5,23 @@ import org.ks.photoeditor.model.FrameInfo;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.UUID;
 
 public interface PhotoSourceRepository {
 
     BehaviorSubject<BufferedImage> getCurrentPhoto();
-    BehaviorSubject<Boolean> canUndo();
-    BehaviorSubject<FrameInfo> getFrameInfo();
-    BehaviorSubject<Boolean> saveFileIsEnable();
 
     boolean loadedNewPhoto(File photo);
-    void undo();
+
+    void loadedEditedPhoto(UUID id);
+
+    void saveEditedPhoto();
+
     void revertPhoto();
+
     void updatePhoto(BufferedImage editedImage);
+
     void clear();
 
+    BehaviorSubject<FrameInfo> getFrameInfo();
 }

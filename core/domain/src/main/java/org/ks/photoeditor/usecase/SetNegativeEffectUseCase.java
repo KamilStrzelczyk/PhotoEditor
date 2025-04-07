@@ -1,7 +1,6 @@
 package org.ks.photoeditor.usecase;
 
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.inject.Inject;
@@ -19,10 +18,7 @@ public class SetNegativeEffectUseCase {
 
     public void run() {
         System.out.println("Negative image 1");
-        Disposable photoSubscription = userRepository
-                .getCurrentPhoto()
-                .observeOn(Schedulers.computation())
-                .firstElement()
+        Disposable photoSubscription = userRepository.getCurrentPhoto().firstElement()
                 .subscribe(
                         photo -> {
                             if (photo != null) {

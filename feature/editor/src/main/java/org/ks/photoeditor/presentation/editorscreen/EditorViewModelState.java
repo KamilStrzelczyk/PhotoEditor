@@ -7,8 +7,6 @@ public class EditorViewModelState {
   private boolean isEffectsSelected = false;
   private boolean isLightSelected = false;
   private boolean isCancelled = false;
-  private boolean isUndoButtonActive = false;
-  private boolean isSaveButtonActive = false;
 
   private void resetStates() {
     this.isImageCropperVisible = false;
@@ -50,25 +48,9 @@ public class EditorViewModelState {
     return isLightSelected;
   }
 
-  public boolean isUndoButtonActive() {
-    return isUndoButtonActive;
-  }
-
-  public void setUndoButtonActive(Boolean canUndo) {
-    this.isUndoButtonActive = canUndo;
-  }
-
   public void setFiltersSelected() {
     resetStates();
     this.isEffectsSelected = true;
-  }
-
-  public void setSaveButtonActive(Boolean isActive) {
-    this.isSaveButtonActive = isActive;
-  }
-
-  public boolean isSaveButtonActive() {
-    return isSaveButtonActive;
   }
 
   public void setLightSelected() {

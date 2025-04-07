@@ -13,7 +13,14 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import org.ks.photoeditor.PEImage;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
@@ -21,7 +28,6 @@ import org.ks.photoeditor.utils.Res;
 
 public class DashboardScreen extends JDialog {
 
-  private static final String TITLE = "Wybierz plik";
   private static final String PLUS_IC = "plus_ic.png";
   private static final String EXAMPLE = "example_1.jpg";
   private static final String EXAMPLE_2 = "example_2.png";
@@ -35,7 +41,7 @@ public class DashboardScreen extends JDialog {
     setLayout(new BorderLayout());
     JScrollPane scrollPane = createImageGridScrollPane(this::handleButtonClick);
     add(scrollPane, BorderLayout.NORTH);
-    setTitle(TITLE);
+    setTitle("PhotoEditor");
     setSize(600, 400);
     setLocationRelativeTo(null);
     setModal(true);
@@ -48,9 +54,9 @@ public class DashboardScreen extends JDialog {
 
   private JScrollPane createImageGridScrollPane(Consumer<PEImage> onButtonClicked) {
     return new JScrollPane(
-        createButtonGrid(onButtonClicked),
-        ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            createButtonGrid(onButtonClicked),
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
   }
 
   private JPanel createButtonGrid(Consumer<PEImage> onButtonClicked) {
@@ -79,9 +85,10 @@ public class DashboardScreen extends JDialog {
     ImageIcon imageExample2 = new ImageIcon(urlExample2);
 
     return List.of(
-        new PEImage(UUID.randomUUID(), plusIcon, null),
-        new PEImage(UUID.randomUUID(), imageExample1, urlExample1),
-        new PEImage(UUID.randomUUID(), imageExample2, urlExample2));
+            new PEImage(UUID.randomUUID(), plusIcon, null),
+            new PEImage(UUID.randomUUID(), imageExample1, urlExample1),
+            new PEImage(UUID.randomUUID(), imageExample2, urlExample2)
+    );
   }
 
   private List<JButton> createJButtons(List<PEImage> icons, Consumer<PEImage> onButtonClicked) {
@@ -91,11 +98,10 @@ public class DashboardScreen extends JDialog {
   private JButton createButton(PEImage peImage, Consumer<PEImage> onButtonClicked) {
     Image imageToScale = peImage.image().getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
     JButton button = new JButton(new ImageIcon(imageToScale));
-    button.addActionListener(
-        e -> {
-          System.out.println(peImage.id());
-          onButtonClicked.accept(peImage);
-        });
+    button.addActionListener(e -> {
+      System.out.println(peImage.id());
+      onButtonClicked.accept(peImage);
+    });
     button.setPreferredSize(new Dimension(100, 100));
     return button;
   }
@@ -120,8 +126,7 @@ public class DashboardScreen extends JDialog {
 
   private void uploadImage() {
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setFileFilter(
-        new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
+    fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Obrazy (JPG, PNG)", "jpg", "png"));
     int result = fileChooser.showOpenDialog(this);
     if (result == JFileChooser.APPROVE_OPTION) {
       File file = fileChooser.getSelectedFile();

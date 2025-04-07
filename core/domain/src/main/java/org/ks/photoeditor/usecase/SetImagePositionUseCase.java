@@ -1,7 +1,6 @@
 package org.ks.photoeditor.usecase;
 
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.ks.photoeditor.repository.PhotoSourceRepository;
 
 import javax.inject.Inject;
@@ -29,10 +28,7 @@ public class SetImagePositionUseCase {
 
     private void rotateImage(double angle) {
         System.out.println("Rotating image " + (angle > 0 ? "right" : "left"));
-        Disposable photoSubscription = userRepository
-                .getCurrentPhoto()
-                .observeOn(Schedulers.computation())
-                .firstElement()
+        Disposable photoSubscription = userRepository.getCurrentPhoto().firstElement()
                 .subscribe(
                         photo -> {
                             if (photo != null) {
