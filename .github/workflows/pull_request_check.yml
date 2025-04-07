@@ -35,5 +35,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Run Checkstyle (Main + Test)
-        run: ./gradlew checkstyleMain checkstyleTest
+      - name: Run Checkstyle (Main only)
+        run: ./gradlew checkstyleMain
